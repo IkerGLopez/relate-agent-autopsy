@@ -1,0 +1,26 @@
+# Local tooling
+/.atl/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+
+# Node.js
+node_modules/
+coverage/
+
+# Build output
+dist/
+build/
+
+# Temporary Relate stores (keep the submission .rl file trackable)
+/.relate-tmp/
+*.tmp.rl
