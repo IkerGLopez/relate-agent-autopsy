@@ -273,7 +273,7 @@ the README reproduction path, the video, the submission. Below that line the out
 | OW3 | Create `AGENTS.md` | **done** | agent | Created in `f854fd1`; completed on `chore/m0-foundations` with layout, commands, environment, tests, style and branch/commit policy. |
 | OW4 | Project `.venv` + Relate integration | **closed** | agent | Closed without installing `relate-db`: one seam over the `relate` CLI (D12, `DESIGN.md` §0). M2 is not blocked by it. |
 | OW5 | Verify `relate` v1.3.0 store create/query/vector-index surface | **done** | agent | Satisfied by the probe table in `DESIGN.md` §0, where every row carries its command and its observed result. |
-| OW6 | `DESIGN.md` | pending | human + agent | Next step after this plan. Everything in §7. |
+| OW6 | `DESIGN.md` | **done** | human + agent | `84d00d5`, and it covers the seven points of §7. Closed by decision A (2026-11-26, §8 L7): the document keeps `status: proposed` and is accepted section by section as each milestone validates it against a real store (§1/§3 in M2–M3, §4 in M1). |
 | OW7 | Trace format, three traces, sanitizer | pending | agent | M1. |
 | OW8 | Graph builder + structural invariants | pending | agent | M2. |
 | OW9 | Three demonstration queries | pending | agent | M3. |
@@ -432,3 +432,12 @@ This plan deliberately says nothing about:
   (`| tail`, `| head`) truncates it and can drop the rest of a chained command; `git.exe` writing
   directly to the captured stdout behaves the same way. Redirect to a file and read it, or run one
   `git.exe` invocation per call. This cost two silent non-commits before it was noticed.
+- **L7 (2026-11-26, 23:55 CET)** — Human's instruction, verbatim: *"Vamos con la salida A."* OW6 is
+  closed as delivered; `DESIGN.md` keeps `status: proposed` and is accepted section by section as each
+  milestone validates it against the store (§1/§3 in M2–M3, §4 in M1). R10 stays covered by the
+  `trace_version` bump rule the design already defines in §4.2. Also recorded here, because it is
+  evidence and not a footnote: the first push (`5dc4a41..30a7097`, authorised by the human with *"Pues
+  haz el push"*) produced a run with **zero jobs** — a plain YAML scalar cannot contain `": "`, and a
+  step name did, so GitHub rejected the whole workflow file. Fixed and re-pushed in the same session;
+  the red run is the defect the push was meant to expose, and the green run is what remains to be seen
+  (§6 R5, §3.1 item 3).
