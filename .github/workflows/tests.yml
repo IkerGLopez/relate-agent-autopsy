@@ -23,7 +23,7 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
 
-      - name: Install uv (pinned: exact versions only)
+      - name: Install uv (exact version pin)
         uses: astral-sh/setup-uv@v5
         with:
           version: "0.12.14"
