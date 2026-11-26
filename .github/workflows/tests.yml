@@ -1,0 +1,40 @@
+name: tests
+
+# The workflow is evidence, never a gate (`PLAN.md` §6 R5): the local
+# `python -m pytest` run is the acceptance evidence, and this file is what a
+# first push turns into a second, independent observation.
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pytest:
+    name: pytest on Python 3.12
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Install uv (pinned: exact versions only)
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.12.14"
+          enable-cache: true
+
+      # `--frozen` refuses to re-resolve: the lockfile is the environment, so a
+      # green run certifies the environment a stranger gets from a clean clone.
+      - name: Install the locked environment
+        run: uv sync --frozen
+
+      # No `relate` binary is installed here on purpose: the suite must pass
+      # without it (§IV, replay from committed artefacts).
+      - name: Run the suite
+        run: uv run --frozen pytest -q
