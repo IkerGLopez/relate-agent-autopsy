@@ -1,0 +1,40 @@
+[build-system]
+# Exact pin, like every other version in this repository (AGENTS.md).
+requires = ["setuptools==84.2.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autopsy"
+version = "0.0.0"
+description = "Forensic report of agent decisions, rebuilt from committed traces into a Relate store."
+readme = "README.md"
+requires-python = "==3.12.*"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["forensics", "agents", "graph", "relate"]
+dependencies = [
+    # Retrieval (D1): TF-IDF + TruncatedSVD, computed locally, no network.
+    # Brings numpy, scipy, joblib and threadpoolctl as locked transitives.
+    "scikit-learn==1.9.1",
+]
+
+[dependency-groups]
+# Test tooling only. Nothing else: no type checker, no plugins, no web
+# framework, no templating engine (PLAN §2, "dependencies stay minimal").
+dev = ["pytest==9.2.0"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.uv]
+# 24-hour cooldown on fresh releases, mirroring `minimumReleaseAge` on the
+# Node side (AGENTS.md, "Dependency policy"). A per-package override needs a
+# written reason in the commit message.
+exclude-newer = "1 day"
+
+[tool.pytest.ini_options]
+minversion = "9.0"
+testpaths = ["tests"]
