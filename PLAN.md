@@ -124,9 +124,9 @@ Deliverables (state at close; each line names the commit that holds it):
 - [x] `AGENTS.md`: commands, layout, style, test invocation, branch/commit policy — created in
       `f854fd1`, completed on `chore/m0-foundations`.
 - [x] `pyproject.toml`, `.gitignore` review (`5d05fc0`), `README.md` skeleton (existing headings kept).
-- [ ] `.env.example` — **not delivered**. The harness refuses to write any path matching
-      `.env(?:$|[./_-])` and has no allowlist; bypassing it was refused. The contract is documented
-      in `AGENTS.md` §Environment and `README.md` instead. See §8 L6.
+- [x] `.env.example` — delivered by the human author's hand on this branch: the harness denies that
+      path to agent tools by name, so the agent wrote the content and the human placed and staged it.
+      See §8 L6 for the mechanism and for what the split of duties was.
 - [x] `.venv` created with `scikit-learn` and `pytest` installed **inside it**; **no `relate` Python
       package is installed** (D12). The seam that invokes the `relate` CLI lands in `src/autopsy/store.py`,
       and the commands it runs are recorded in `AGENTS.md` and `README.md`.
@@ -148,11 +148,12 @@ Deliverables (state at close; each line names the commit that holds it):
 Relate through one seam, the CLI (D12), so nothing in M0 or M2 waits on an install. Residual risk
 stays in §6 R1: every store read and write needs the `relate` binary.
 
-**Status at close (2026-11-26): closed with one declared gap** — `.env.example`. Per-
-item evidence, the one DoD correction and everything left unverified are in §8 L6. In short: DoD 1
-passes with a correction (item 1 as written cannot pass: `relate clone` takes `SOURCE DEST` and needs
-an existing database, so the recorded sequence creates a source store first), DoD 2–4 pass as written,
-and DoD 5 passes for the `.venv` and the CLI invocation, not for a copyable environment template.
+**Status at close (2026-11-26): closed.** Every deliverable landed; one of them needed the human's
+own hand because the agent harness denies that path. Per-item evidence, the one DoD correction and
+everything left unverified are in §8 L6. In short: DoD 1 passes with a correction (item 1 as written
+cannot pass: `relate clone` takes `SOURCE DEST` and needs an existing database, so the recorded
+sequence creates a source store first), DoD 2–4 pass as written, and DoD 5 passes for the `.venv`,
+the CLI invocation and the environment contract.
 
 ### M1 — Trace format, three curated traces, sanitizer
 **Window:** Sat 28 Nov → Sun 29 Nov · **Branch:** `feat/m1-traces` · **Depends on:** M0, and the
@@ -277,7 +278,7 @@ the README reproduction path, the video, the submission. Below that line the out
 | OW8 | Graph builder + structural invariants | pending | agent | M2. |
 | OW9 | Three demonstration queries | pending | agent | M3. |
 | OW10 | `demo` and `verify` subcommands | pending | agent | M4. |
-| OW11 | Judge-facing `README.md` + `.env.example` | pending | agent | M5. The `.env.example` half is carried here: M0 could not create it (harness guard, §8 L6). |
+| OW11 | Judge-facing `README.md` + `.env.example` | pending | agent | M5 for the README half. The contract file landed on `chore/m0-foundations`: content written by the agent, placed and staged by the human author because the harness guard denies that path to agent tools (§8 L6). |
 | OW12 | GitHub Actions workflow, first green run | blocked | human push, then agent reads result | Workflow committed on `chore/m0-foundations` (`uv sync --frozen`, `uv run --frozen pytest`); the green run still needs a push decision; no `gh`, no token. |
 | OW13 | First push to the public remote | blocked | human | §4: push is the human's decision. |
 | OW14 | Video recording | pending | human | Needs the frozen store. |
@@ -387,7 +388,9 @@ This plan deliberately says nothing about:
     Style and Branches/commits.
   - `0e71b68` — `README.md` skeleton, five headings kept, with the reproducible setup path and an
     "exists today" column.
-  - this commit — M0 marked, this log appended.
+  - `afc654e` — M0 marked and this log appended.
+  - the commit after `afc654e` — the environment contract, authored by the human author and committed
+    by the agent; the mechanism, and why it was split that way, is in the paragraph below.
 
   **DoD 1–5, as observed.** All commands ran in the project venv on this machine (WSL2 Linux 6.6,
   Python 3.12.3, uv 0.12.14, `relate` v1.3.0):
@@ -409,15 +412,16 @@ This plan deliberately says nothing about:
      `$AUTOPSY_RELATE_BIN` override and PATH fallback) and the `clone`/`info` forms are reproducible
      from `README.md` + `AGENTS.md` alone; they are the commands that actually ran.
 
-  **Closed with one declared gap.** `.env.example` is **not** committed. The harness refuses to write
-  any path matching `/(^|\/)\.env(?:$|[./_-])/` — a fixed list in
-  `node_modules/gentle-pi/lib/sensitive-paths.ts`, with no allowlist and no configuration knob — and
-  it refuses on the name, not on the content: the file holds placeholders and no value. Circumventing
-  it with a glob or by patching the installed package was refused as a guard bypass. The environment
-  contract therefore lives in `AGENTS.md` §Environment and `README.md` instead, and `CONSTITUTION.md`
-  §VI still names a file that does not exist. Two ways out, both the human's: create the file (its
-  content is recorded in this session and in the log entry above) so the rule and the repository agree
-  again, or amend §VI in its own commit. Carried as OW11 at M5.
+  **One deliverable needed the human's hand.** `.env.example` is in the tree, and how it got there is
+  worth recording, because the constraint is the harness and not this project: the agent harness denies
+  any tool call whose path matches `/(^|\/)\.env(?:$|[./_-])/` — a fixed list in
+  `node_modules/gentle-pi/lib/sensitive-paths.ts`, with no allowlist and no configuration knob — and it
+  refuses on the name, not on the content: the file holds placeholders and no value. Globbing the path
+  past the guard, or patching the installed list, was refused as a guard bypass. So the agent wrote the
+  content to `.atl/env-example.txt` (git-ignored), the human copied it into place and staged it, and the
+  agent committed it; the staged blob is the one the agent prepared (`9f687cf8…`), so nothing drifted in
+  unseen. The contract now agrees with `CONSTITUTION.md` §VI and §6 and with the resolution order the
+  seam actually implements. M5 still owes the README half (OW11).
 
   **Left unverified, deliberately.** The CI run (the workflow is committed, but a green run needs a
   push, and a red one is not debugged on spec — §3.1 item 3); everything M1 and later; the `.venv` is a
