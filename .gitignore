@@ -12,12 +12,10 @@ __pycache__/
 .venv/
 .pytest_cache/
 *.egg-info/
+.coverage
+htmlcov/
 
-# Node.js
-node_modules/
-coverage/
-
-# Build output
+# Build output (python -m build, setuptools)
 dist/
 build/
 
