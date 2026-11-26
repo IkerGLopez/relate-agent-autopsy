@@ -117,17 +117,22 @@ be queried before the store exists, and nothing can be documented before the dem
 **Window:** Thu 26 Nov (rest of day) → Fri 27 Nov · **Branch:** standalone constitution commit on the
 default branch, then `chore/m0-foundations` · **Depends on:** nothing.
 
-Deliverables:
-- `CONSTITUTION.md` committed **as its own standalone commit** with its rationale (§5). Requires the
-  human's explicit go-ahead for the commit.
-- `constitution_template.md` removed from the repository (irreversible; authorised as D10).
-- `AGENTS.md`: commands, layout, style, test invocation, branch/commit policy.
-- `pyproject.toml`, `.env.example`, `.gitignore` review, `README.md` skeleton (existing headings kept).
-- `.venv` created with `scikit-learn` and `pytest` installed **inside it**; **no `relate` Python
-  package is installed** (D12). The seam that invokes the `relate` CLI lands in `src/autopsy/store.py`,
-  and the commands it runs are recorded in `AGENTS.md` and `README.md`.
-- `src/autopsy/` skeleton: `__init__.py`, `__main__.py` with the three subcommand stubs, one sanity test.
-- `.github/workflows/tests.yml` running `pytest` (it cannot be observed green until the human pushes).
+Deliverables (state at close; each line names the commit that holds it):
+- [x] `CONSTITUTION.md` committed **as its own standalone commit** with its rationale (§5). Requires the
+      human's explicit go-ahead for the commit — `ceb6305`.
+- [x] `constitution_template.md` removed from the repository (irreversible; authorised as D10).
+- [x] `AGENTS.md`: commands, layout, style, test invocation, branch/commit policy — created in
+      `f854fd1`, completed on `chore/m0-foundations`.
+- [x] `pyproject.toml`, `.gitignore` review (`5d05fc0`), `README.md` skeleton (existing headings kept).
+- [ ] `.env.example` — **not delivered**. The harness refuses to write any path matching
+      `.env(?:$|[./_-])` and has no allowlist; bypassing it was refused. The contract is documented
+      in `AGENTS.md` §Environment and `README.md` instead. See §8 L6.
+- [x] `.venv` created with `scikit-learn` and `pytest` installed **inside it**; **no `relate` Python
+      package is installed** (D12). The seam that invokes the `relate` CLI lands in `src/autopsy/store.py`,
+      and the commands it runs are recorded in `AGENTS.md` and `README.md`.
+- [x] `src/autopsy/` skeleton: `__init__.py`, `__main__.py` with the three subcommand stubs, one sanity test.
+- [x] `.github/workflows/tests.yml` running `pytest` (it cannot be observed green until the human pushes)
+      — file committed, green run **unverified**.
 
 **Definition of done (verifiable):**
 1. In the project venv, `python -c "import autopsy"` exits 0, and the CLI integration answers:
@@ -140,8 +145,14 @@ Deliverables:
 5. The install command for the Relate library is reproducible from `README.md` alone.
 
 **Blocker risk closed:** the Relate Python library is absent and stays absent — the builder reaches
-Relate through one seam over the CLI (D12), so nothing in M0 or M2 waits on an install. Residual risk
+Relate through one seam, the CLI (D12), so nothing in M0 or M2 waits on an install. Residual risk
 stays in §6 R1: every store read and write needs the `relate` binary.
+
+**Status at close (2026-11-26): closed with one declared gap** — `.env.example`. Per-
+item evidence, the one DoD correction and everything left unverified are in §8 L6. In short: DoD 1
+passes with a correction (item 1 as written cannot pass: `relate clone` takes `SOURCE DEST` and needs
+an existing database, so the recorded sequence creates a source store first), DoD 2–4 pass as written,
+and DoD 5 passes for the `.venv` and the CLI invocation, not for a copyable environment template.
 
 ### M1 — Trace format, three curated traces, sanitizer
 **Window:** Sat 28 Nov → Sun 29 Nov · **Branch:** `feat/m1-traces` · **Depends on:** M0, and the
@@ -258,7 +269,7 @@ the README reproduction path, the video, the submission. Below that line the out
 | --- | --- | --- | --- | --- |
 | OW1 | Commit `CONSTITUTION.md` as a standalone change | **done** | agent (go-ahead given) | `ceb6305`: one file changed, rationale in the commit body (§5). |
 | OW2 | Remove `constitution_template.md` from the repo | **done** | agent (authorised, D10) | Irreversible and executed. The file governed a different project (BidCraft) and linked to `.ai/constitution.md`, so it was never an Agent Autopsy artefact. |
-| OW3 | Create `AGENTS.md` | pending | agent | §6 location for working conventions. |
+| OW3 | Create `AGENTS.md` | **done** | agent | Created in `f854fd1`; completed on `chore/m0-foundations` with layout, commands, environment, tests, style and branch/commit policy. |
 | OW4 | Project `.venv` + Relate integration | **closed** | agent | Closed without installing `relate-db`: one seam over the `relate` CLI (D12, `DESIGN.md` §0). M2 is not blocked by it. |
 | OW5 | Verify `relate` v1.3.0 store create/query/vector-index surface | **done** | agent | Satisfied by the probe table in `DESIGN.md` §0, where every row carries its command and its observed result. |
 | OW6 | `DESIGN.md` | pending | human + agent | Next step after this plan. Everything in §7. |
@@ -266,8 +277,8 @@ the README reproduction path, the video, the submission. Below that line the out
 | OW8 | Graph builder + structural invariants | pending | agent | M2. |
 | OW9 | Three demonstration queries | pending | agent | M3. |
 | OW10 | `demo` and `verify` subcommands | pending | agent | M4. |
-| OW11 | Judge-facing `README.md` + `.env.example` | pending | agent | M5. |
-| OW12 | GitHub Actions workflow, first green run | blocked | human push, then agent reads result | Needs a push decision; no `gh`, no token. |
+| OW11 | Judge-facing `README.md` + `.env.example` | pending | agent | M5. The `.env.example` half is carried here: M0 could not create it (harness guard, §8 L6). |
+| OW12 | GitHub Actions workflow, first green run | blocked | human push, then agent reads result | Workflow committed on `chore/m0-foundations` (`uv sync --frozen`, `uv run --frozen pytest`); the green run still needs a push decision; no `gh`, no token. |
 | OW13 | First push to the public remote | blocked | human | §4: push is the human's decision. |
 | OW14 | Video recording | pending | human | Needs the frozen store. |
 | OW15 | Devpost submission | pending | human | Target Fri 11 Dec 12:00 CET. |
@@ -349,3 +360,71 @@ This plan deliberately says nothing about:
   the builder reaches Relate through one seam over the `relate` CLI. No constitutional amendment was
   needed: §3 still describes an embedded, serverless Relate, and the CLI satisfies it. `DESIGN.md` and
   `PLAN.md` stay untracked pending the human's commit decision.
+- **L6 (2026-11-26, 23:30 CET)** — Human's instruction, verbatim (excerpt): *"Tarea de esta sesión:
+  cerrar M0 (Foundation and hygiene), y nada más. Rama primero: `chore/m0-foundations` desde `main`."*
+  plus the five deliverables and a definition of done. Reading protocol reported **`conflict`**, not
+  `read`, for two reasons that the instruction itself did not know about:
+  - The brief described a stale repository ("three documentation commits"). `main` was at `ce3a728`
+    with six, including `f854fd1` (AGENTS.md already existed) and `5d05fc0` (`.gitignore` already
+    reviewed). Two deliverables were therefore already partly delivered, and the `.gitignore`
+    needed verification rather than rewriting: it already covers `.venv/`, `__pycache__/`,
+    `.pytest_cache/`, the environment files with `!.env.example`, and keeps `*.rl` trackable while
+    ignoring `*.tmp.rl`.
+  - The brief said "no package manager beyond `pip`"; `CONSTITUTION.md` v1.1 §3 and `AGENTS.md`
+    say `uv`. Resolved by the human's live instruction: *"Quiero usar uv. Si hay algo hecho con pip,
+    deshazlo y rehazlo con uv."* Nothing had been installed with `pip` — only read-only probes — so
+    nothing needed undoing, and `uv` 0.12.14 was already installed at `~/.local/bin/uv` (off `PATH`):
+    no tool was installed outside `.venv`, and no constitutional exception was consumed.
+
+  **What landed** on `chore/m0-foundations`, one reviewable unit per commit:
+  - `bd9f3b4` — `pyproject.toml` (src layout, `scikit-learn==1.9.1`, dev group `pytest==9.2.0`,
+    `[tool.uv] exclude-newer = "1 day"`, `testpaths`), `uv.lock` (14 packages locked), the package
+    skeleton (`__init__.py`, `__main__.py` with the three stubs, `store.py`), and one sanity test.
+  - `3bbed22` — `.github/workflows/tests.yml`: uv 0.12.14 pinned, `uv sync --frozen`,
+    `uv run --frozen pytest -q`, no `relate` binary on the runner by design.
+  - `ec77b68` — `AGENTS.md` completed: environment baseline corrected (the CLI seam replaces the
+    "embedded library" line that contradicted D12), plus Layout, Commands, Environment, Tests,
+    Style and Branches/commits.
+  - `0e71b68` — `README.md` skeleton, five headings kept, with the reproducible setup path and an
+    "exists today" column.
+  - this commit — M0 marked, this log appended.
+
+  **DoD 1–5, as observed.** All commands ran in the project venv on this machine (WSL2 Linux 6.6,
+  Python 3.12.3, uv 0.12.14, `relate` v1.3.0):
+  1. `python -c "import autopsy"` → `autopsy 0.0.0`, exit 0. The CLI integration answers, **with a
+     correction to the item as written**: `relate clone` takes `SOURCE DEST` and copies an *existing*
+     database, so the recorded form cannot pass — on an empty temporary directory it exits 1 with
+     `storage error: read-only open requires an existing database`. The sequence that works, and its
+     output: `relate -d $T/src --safe -c "CREATE (:Session {session_id:'m0-probe'})"` (exit 0) →
+     `relate clone $T/src $T/autopsy.rl` (exit 0) → `relate info -d $T/autopsy.rl --json` (exit 0,
+     `{"layout":"bundle",…,"node_count":1,"rel_count":0,…}`). `import relate` fails with
+     `ModuleNotFoundError`, as intended (D12). As a by-product the seam answered end to end:
+     `info()` returned that payload and `query()` returned `[{'id': 'm0-probe'}]`.
+  2. `python -m pytest` → `1 passed`, exit 0. The test needs no `relate` binary.
+  3. `git log --oneline -1 -- CONSTITUTION.md` → `ce3a728 docs(constitution): authorize uv as the
+     Python dependency manager (v1.1)`, which changes only `CONSTITUTION.md` (1 file, +3/−1); the
+     original ratification `ceb6305` likewise touches only `CONSTITUTION.md` (1 file, +137).
+  4. `git status --short` clean after this commit; nothing pushed, no PR.
+  5. The `.venv` command (`uv sync`), the test command, the CLI resolution (`~/.local/bin/relate`, the
+     `$AUTOPSY_RELATE_BIN` override and PATH fallback) and the `clone`/`info` forms are reproducible
+     from `README.md` + `AGENTS.md` alone; they are the commands that actually ran.
+
+  **Closed with one declared gap.** `.env.example` is **not** committed. The harness refuses to write
+  any path matching `/(^|\/)\.env(?:$|[./_-])/` — a fixed list in
+  `node_modules/gentle-pi/lib/sensitive-paths.ts`, with no allowlist and no configuration knob — and
+  it refuses on the name, not on the content: the file holds placeholders and no value. Circumventing
+  it with a glob or by patching the installed package was refused as a guard bypass. The environment
+  contract therefore lives in `AGENTS.md` §Environment and `README.md` instead, and `CONSTITUTION.md`
+  §VI still names a file that does not exist. Two ways out, both the human's: create the file (its
+  content is recorded in this session and in the log entry above) so the rule and the repository agree
+  again, or amend §VI in its own commit. Carried as OW11 at M5.
+
+  **Left unverified, deliberately.** The CI run (the workflow is committed, but a green run needs a
+  push, and a red one is not debugged on spec — §3.1 item 3); everything M1 and later; the `.venv` is a
+  Linux environment inside a Windows-hosted repository and is git-ignored, so a clean clone recreates
+  it with `uv sync` rather than inheriting it.
+
+  **Operational note for the next worker.** From WSL, piping `git.exe` output into a Unix tool
+  (`| tail`, `| head`) truncates it and can drop the rest of a chained command; `git.exe` writing
+  directly to the captured stdout behaves the same way. Redirect to a file and read it, or run one
+  `git.exe` invocation per call. This cost two silent non-commits before it was noticed.
