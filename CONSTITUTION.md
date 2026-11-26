@@ -71,6 +71,7 @@ The following describes what is available today. It is observed, not a mandate t
 - **Runtime:** Node 22 and Python 3.12 are installed. No `cargo`, no `go`. Exact versions and dependencies belong to the project's dependency manifests, not to this document.
 - **Relate:** used as an embedded library, in a project-local virtual environment, with no server. The `relate` CLI is already installed by the human (`~/.local/bin/relate`, not on `PATH` by default) and no other installer, package manager or tool may be added without explicit authorization.
 - **Recorder and query tooling:** Python, because that is the language in which the store is written today. Node is reserved for the browser viewer.
+- **Python dependencies: `uv`.** Authorized by the human author as the dependency manager for the project-local virtual environment. `uv.lock` is committed, versions are exact, and a 24-hour cooldown (`[tool.uv] exclude-newer`) mirrors the Node-side `minimumReleaseAge`. It replaces `pip`; it does not replace the `relate` CLI and adds no server. Every other installer, package manager or tool still needs explicit authorization.
 - **Retrieval:** lexical scoring plus vectors computed locally without network calls, indexed with Relate's vector search. The hybrid shape is a constraint; scoring formulas and thresholds belong to the specifications.
 - **Agent loop:** an owned loop with a single seam — `next_step(messages, tools)` — and two implementations, live and replay. No provider SDK owns the loop.
 - **Traces:** one sanitized JSON document per session, committed, versioned by an explicit `trace_version` field. Provider selection is an environment decision, not a constitutional one.
@@ -125,7 +126,8 @@ Amendments are their own change: a dedicated commit with its own rationale recor
 
 Rules are retired explicitly, never ignored. Every rule carries its reason so a later reader can judge whether it still holds. Remembered decisions are revisable, not eternal.
 
-**Version**: v1 | **Ratified**: 2026-11-26 | **Last Amended**: 2026-11-26
+**Version**: v1.1 | **Ratified**: 2026-11-26 | **Last Amended**: 2026-11-26
+**Amendments**: v1.1 — `uv` authorized as the Python dependency manager (§3).
 
 ## 6. Where Things Live
 
