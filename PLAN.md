@@ -279,7 +279,7 @@ the README reproduction path, the video, the submission. Below that line the out
 | OW9 | Three demonstration queries | pending | agent | M3. |
 | OW10 | `demo` and `verify` subcommands | pending | agent | M4. |
 | OW11 | Judge-facing `README.md` + `.env.example` | pending | agent | M5 for the README half. The contract file landed on `chore/m0-foundations`: content written by the agent, placed and staged by the human author because the harness guard denies that path to agent tools (§8 L6). |
-| OW12 | GitHub Actions workflow, first green run | blocked | human push, then agent reads result | Workflow committed on `chore/m0-foundations` (`uv sync --frozen`, `uv run --frozen pytest`); the green run still needs a push decision; no `gh`, no token. |
+| OW12 | GitHub Actions workflow, first green run | **done** | agent, after the human's push | Run `45909974733` on `a456dfd` is **success**. The first run (`45908776954`) failed in 0s with zero jobs: a plain YAML scalar cannot contain `": "` and a step name did, so the whole file was rejected. Fixed in `9157451`. |
 | OW13 | First push to the public remote | blocked | human | §4: push is the human's decision. |
 | OW14 | Video recording | pending | human | Needs the frozen store. |
 | OW15 | Devpost submission | pending | human | Target Fri 11 Dec 12:00 CET. |
@@ -439,5 +439,6 @@ This plan deliberately says nothing about:
   evidence and not a footnote: the first push (`5dc4a41..30a7097`, authorised by the human with *"Pues
   haz el push"*) produced a run with **zero jobs** — a plain YAML scalar cannot contain `": "`, and a
   step name did, so GitHub rejected the whole workflow file. Fixed and re-pushed in the same session;
-  the red run is the defect the push was meant to expose, and the green run is what remains to be seen
-  (§6 R5, §3.1 item 3).
+  the red run is the defect the push was meant to expose, and the green run followed it (run
+  `45909974733` on `a456dfd`, `success`), so R5's alarm never fires and §3.1 item 3 keeps its workflow
+  without needing the cut.

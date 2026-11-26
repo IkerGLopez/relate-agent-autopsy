@@ -72,6 +72,11 @@ none of this is written by hand: everything goes through `autopsy.store`.
   that rejected input left the store and counters unchanged. No golden files (D5).
 - The constitution (§4) names the four blocks that must exist by M4: graph builder, demo queries,
   structural invariants of the store, and regeneration of the store from committed traces.
+- **Observing CI from WSL.** `gh` is installed on the Windows side
+  (`C:\Program Files\GitHub CLI\gh.exe`), authenticated in the Windows keyring, and **not on WSL's
+  `PATH`**: call it by full path. `gh run list -R IkerGLopez/relate-agent-autopsy` and
+  `gh run watch <id> --exit-status` are how a workflow result turns into evidence. A workflow that
+  fails in 0s with zero jobs means the file did not parse — validate the YAML before blaming a step.
 
 ## Style
 
